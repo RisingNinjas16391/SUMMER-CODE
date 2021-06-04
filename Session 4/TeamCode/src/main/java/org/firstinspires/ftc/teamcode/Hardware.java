@@ -57,6 +57,8 @@ public class Hardware {
     public DcMotor leftFront;
     public DcMotor rightRear;
     public DcMotor leftRear;
+    public DcMotorEx flywheel;
+    public DcMotor kicker;
     /* local OpMode members. */
     HardwareMap hwMap = null;
 
@@ -79,14 +81,25 @@ public class Hardware {
         leftFront   = hwMap.get(DcMotor.class, "left front");
         rightRear   = hwMap.get(DcMotor.class, "right rear");
         leftRear    = hwMap.get(DcMotor.class, "left rear");
+        flywheel    = hwMap.get(DcMotorEx.class, "flywheel");
+        kicker      = hwMap.get(DcMotor.class, "kicker");
         rightFront  .setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         leftFront   .setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         rightRear   .setDirection(DcMotor.Direction.REVERSE);
         leftRear    .setDirection(DcMotor.Direction.FORWARD);
+        flywheel    .setDirection(DcMotor.Direction.FORWARD);
+        kicker      .setDirection(DcMotor.Direction.REVERSE);
         rightFront  .setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftFront   .setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightRear   .setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftRear    .setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+        flywheel    .setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        kicker      .setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightFront  .setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftFront   .setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightRear   .setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftRear    .setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        kicker      .setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        flywheel    .setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 }

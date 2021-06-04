@@ -15,6 +15,7 @@ import static java.lang.Math.abs;
 public class TeleOP extends LinearOpMode {
 
     Hardware robot = new Hardware();   //Uses heavily modified untested hardware
+    double launchSpeed = 0;
 
     @Override
     public void runOpMode() {
@@ -27,7 +28,11 @@ public class TeleOP extends LinearOpMode {
         robot.leftFront .setPower(0);
         robot.rightRear .setPower(0);
         robot.leftRear  .setPower(0);
-        robot.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftFront .setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightRear .setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftRear  .setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);      //When finished remove
         robot.leftFront .setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.rightRear .setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.leftRear  .setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -49,9 +54,11 @@ public class TeleOP extends LinearOpMode {
     }
 
     public void editHere() {
-        double forward  = gamepad1.left_stick_y;
-        double strafe   = gamepad1.left_stick_x;
-        double turn     = gamepad1.right_stick_x;
+        // drive train control
+        double forward      = gamepad1.left_stick_y;
+        double strafe       = gamepad1.left_stick_x;
+        double turn         = gamepad1.right_stick_x;
+
         double[] driveValues = {
                 forward + strafe + turn,
                 forward - strafe - turn,
@@ -63,7 +70,27 @@ public class TeleOP extends LinearOpMode {
         robot.rightRear .setPower(driveValues[2]);
         robot.leftRear  .setPower(driveValues[3]);
 
-        //Add code below
+        // Flywheel control
+        if (gamepad1.x) {
+            launchSpeed = 1.00;
+        } else if (gamepad1.y) {
+            launchSpeed = 0.90;
+        } else if (gamepad1.b) {
+            launchSpeed = 0.80;
+        } else if (gamepad1.a) {
+            launchSpeed = 0;
+        }
+        robot.flywheel  .setPower(launchSpeed);
+
+        if (gamepad1.right_bumper) {
+            robot.kicker.setPower(0.50);
+        } else if (gamepad1.left_bumper) {
+            robot.kicker.setPower(-0.25);
+        } else {
+            robot.kicker.setPower(0);
+        }
+
+        // Add code below
     }
 
     public void displayTelemetry() {
@@ -72,6 +99,9 @@ public class TeleOP extends LinearOpMode {
                 .addData("Front Right", robot.leftFront.getCurrentPosition())
                 .addData("Back Left", robot.rightRear.getCurrentPosition())
                 .addData("Back Right", robot.leftRear.getCurrentPosition());
+        telemetry.addLine("Launcher")
+                .addData("Speed", robot.flywheel.getVelocity())
+                .addData("Kicker Location", robot.kicker.getCurrentPosition());
         telemetry.update();
     }
 }

@@ -57,6 +57,7 @@ public class Hardware {
     public DcMotor leftFront;
     public DcMotor rightRear;
     public DcMotor leftRear;
+    public DcMotor intake;
     /* local OpMode members. */
     HardwareMap hwMap = null;
 
@@ -79,14 +80,18 @@ public class Hardware {
         leftFront   = hwMap.get(DcMotor.class, "left front");
         rightRear   = hwMap.get(DcMotor.class, "right rear");
         leftRear    = hwMap.get(DcMotor.class, "left rear");
+        intake      = hwMap.get(DcMotor.class, "intake");
         rightFront  .setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         leftFront   .setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         rightRear   .setDirection(DcMotor.Direction.REVERSE);
         leftRear    .setDirection(DcMotor.Direction.FORWARD);
+        intake      .setDirection(DcMotor.Direction.FORWARD);
         rightFront  .setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftFront   .setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightRear   .setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftRear    .setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intake      .setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 
     }
 }

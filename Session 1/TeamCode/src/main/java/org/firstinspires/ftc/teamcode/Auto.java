@@ -89,7 +89,13 @@ public class Auto extends LinearOpMode {
 
 
     public void editHere() {
-
+        drive(1000,     1000,   1000, 1000, 0.2, 10000);
+        sleep(2000);
+        drive(-1000,    1000,   1000, -1000, 0.2,10000);
+        sleep(2000);
+        drive(-1000,    -1000, -1000, -1000, 0.2, 10000);
+        sleep(2000);
+        drive(1000,     -1000, -1000, 1000, 0.2, 10000);
     }
 
     public void drive (int rightFront, int leftFront, int rightRear, int leftRear, double power, int timeOut) {
@@ -108,28 +114,37 @@ public class Auto extends LinearOpMode {
         robot.rightRear .setTargetPosition(rightRear);
         robot.leftRear  .setTargetPosition(leftRear);
 
+        robot.rightFront.setPower(power);
+        robot.leftFront .setPower(power);
+        robot.rightRear .setPower(power);
+        robot.leftRear  .setPower(power);
+
         robot.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.leftFront .setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.rightRear .setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.leftRear  .setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.rightFront.setPower(power);
-        robot.leftFront .setPower(power);
-        robot.rightRear .setPower(power);
-        robot.leftRear  .setPower(power);
         runtime.reset();
-        while(timeOut > runtime.milliseconds()) {
+        while(timeOut > runtime.milliseconds()
+                && robot.rightFront.isBusy()
+                && robot.leftFront.isBusy()
+                && robot.rightRear.isBusy()
+                && robot.leftRear.isBusy()) {
             displayTelemetry();
             sleep(25);
         }
+        robot.rightFront.setPower(0);
+        robot.rightRear.setPower(0);
+        robot.leftFront.setPower(0);
+        robot.leftRear.setPower(0);
     }
 
     public void displayTelemetry() {
         telemetry.addLine("Drive Encoder ticks")
-                .addData("Front Left", robot.rightFront.getCurrentPosition())
-                .addData("Front Right", robot.leftFront.getCurrentPosition())
-                .addData("Back Left", robot.rightRear.getCurrentPosition())
-                .addData("Back Right", robot.leftRear.getCurrentPosition());
+                .addData("Front Left", robot.leftFront.getCurrentPosition())
+                .addData("Front Right", robot.rightFront.getCurrentPosition())
+                .addData("Back Left", robot.leftRear.getCurrentPosition())
+                .addData("Back Right", robot.rightRear.getCurrentPosition());
         telemetry.update();
     }
 }

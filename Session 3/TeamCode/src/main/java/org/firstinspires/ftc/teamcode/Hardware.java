@@ -87,8 +87,8 @@ public class Hardware {
         leftFront   .setDirection(DcMotor.Direction.FORWARD);// Set to FORWARD if using AndyMark motors
         rightRear   .setDirection(DcMotor.Direction.REVERSE);
         leftRear    .setDirection(DcMotor.Direction.FORWARD);
-        flywheel    .setDirection(DcMotor.Direction.REVERSE);
-        kicker      .setDirection(DcMotor.Direction.FORWARD);
+        flywheel    .setDirection(DcMotor.Direction.FORWARD);
+        kicker      .setDirection(DcMotor.Direction.REVERSE);
         rightFront  .setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftFront   .setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightRear   .setMode(DcMotor.RunMode.RUN_USING_ENCODER);
